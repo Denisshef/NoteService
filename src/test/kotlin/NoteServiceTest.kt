@@ -11,7 +11,7 @@ class NoteServiceTest {
         // act
         val result = NoteService.add(note)
         // assert
-        assertEquals(0, result?.noteId?.compareTo(note.noteId + 1))
+        assertEquals(0, result?.noteId?.compareTo(1))
     }
 
     @Test
