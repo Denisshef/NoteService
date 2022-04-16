@@ -6,6 +6,6 @@ fun main() {
     NoteService.add(noteSecond)
     NoteService.delete(noteFirst)
 
-    println(NoteService.get())
+    println(NoteService.getById(2))
 
 }

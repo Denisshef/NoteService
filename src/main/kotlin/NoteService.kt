@@ -38,9 +38,13 @@ object NoteService {
         return list
     }
 
+    fun getById(id: Int): Notes? {
+        return notes[id]
+    }
+
     // Comments fun -------------
 
-    fun createComment() {
-
-    }
+//    fun createComment() {
+//
+//    }
 }

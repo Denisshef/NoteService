@@ -33,4 +33,25 @@ class NoteServiceTest {
         // assert
         assertEquals(note?.noteId, result?.noteId)
     }
+
+    @Test
+    fun get() {
+        // arrange
+        NoteService.add(Notes(title = "New notes"))
+        // act
+        val result = NoteService.get()
+        // assert
+        assertTrue(result.isNotEmpty())
+    }
+
+    @Test
+    fun getById() {
+        // arrange
+        val note = NoteService.add(Notes(title = "New notes"))
+        val id = note?.noteId ?: 0
+        // act
+        val result = NoteService.getById(id)
+        // assert
+        assertTrue(result?.noteId == id)
+    }
 }
