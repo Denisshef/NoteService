@@ -6,20 +6,21 @@ object NoteService {
 
     // Notes fun ------------------
 
-    fun add(note: Notes): Notes? {
+    fun add(note: Notes): Notes {
         val newNote = note.copy(noteId = ++id)
         notes[id] = newNote
-        return notes[id]
+        return newNote
     }
 
-    fun delete(note: Notes?): Notes? {
-        if (note == null || note.delete) return null
+    fun delete(note: Notes): Notes? {
+        if (note.delete) return null
         val delNote = note.copy(delete = true)
-        return notes.replace(note.noteId, delNote)
+        notes.replace(note.noteId, delNote)
+        return delNote
     }
 
-    fun edit(note: Notes?): Notes? {
-        if (note == null || note.delete) return null
+    fun edit(note: Notes): Notes? {
+        if (note.delete) return null
 
         val newNote = note.copy(
             noteId = note.noteId,
@@ -43,8 +44,94 @@ object NoteService {
     }
 
     // Comments fun -------------
+    fun createComment(note: Notes, comment: Comments): Comments {
+        val value = notes[note.noteId] ?: throw ErrorCreateComment()
+        if (value.delete) throw ErrorCreateCommentDeleteNotes()
+        val tempComment = comment.copy(
+            id = ++commentsId,
+            noteId = note.noteId
+        )
+        comments.add(tempComment)
+        return tempComment
+    }
 
-//    fun createComment() {
-//
-//    }
+    fun deleteComment(comment: Comments): Boolean {
+        for (value in comments) {
+            if (comment.id == value.id) {
+                if (value.delete) throw ErrorNotComment()
+                val result = value.copy(delete = true)
+                comments.remove(value)
+                comments.add(result)
+                return true
+            }
+        }
+        return false
+    }
+
+    fun editComment(comment: Comments): Boolean {
+        for (value in comments) {
+            if (comment.id == value.id) {
+                if (value.delete) throw ErrorNotComment()
+                val result = value.copy(
+                    id = comment.id,
+                    noteId = comment.noteId,
+                    message = "New message"
+                )
+                comments.remove(value)
+                comments.add(result)
+                return true
+            }
+        }
+        return false
+    }
+
+    fun getComment(comment: Comments): Comments {
+        for (value in comments) {
+            if (comment === value) {
+                if (!comment.delete) return value
+            }
+        }
+        throw ErrorNotComment()
+    }
+
+    fun getComment(note: Notes): List<Comments> {
+        if (notes[note.noteId] == null) throw ErrorNotNotes()
+        var result: List<Comments> = emptyList()
+        for (value in comments) {
+            if (value.noteId == note.noteId) {
+                if (!value.delete) result += value
+            }
+        }
+        return result
+    }
+
+    fun restoreComment(comment: Comments): Comments {
+        for (value in comments) {
+            if (comment.id == value.id) {
+                if (!value.delete) throw ErrorNotComment()
+                val result = value.copy(delete = false)
+                comments.remove(value)
+                comments.add(result)
+                return result
+            }
+        }
+        throw ErrorNotComment()
+    }
 }
+
+class ErrorNotNotes : Throwable(
+    message = "Note not find"
+)
+
+class ErrorNotComment : Throwable(
+    message = "Комментарий не существует, или он удален"
+)
+
+class ErrorCreateCommentDeleteNotes : Throwable(
+    message = "Переданный Note удалён"
+)
+
+class ErrorCreateComment : Throwable(
+    message = "Переданный Note не существует"
+)
+

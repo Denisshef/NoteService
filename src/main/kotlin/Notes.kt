@@ -8,8 +8,8 @@ data class Notes(
     val privacyComment: String = "no",
     val comments: ArrayList<Comments>? = null,
     val delete: Boolean = false
-) {
+){
     override fun toString(): String {
-        return "noteId=$noteId"
+        return "{noteId=$noteId, delete=$delete}"
     }
 }

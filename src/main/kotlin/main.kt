@@ -1,11 +1,15 @@
 fun main() {
-    val noteFirst = Notes(title = "NOTE 1", text = "Text note first")
-    val noteSecond = Notes(title = "NOTE 2", text = "Text note second")
+    val noteFirst = NoteService.add(Notes(title = "NOTE 1", text = "Text note first"))
 
-    NoteService.add(noteFirst)
-    NoteService.add(noteSecond)
-    NoteService.delete(noteFirst)
+    val comment = NoteService.createComment(
+        noteFirst,
+        Comments(message = "Comment text")
+    )
+    val comment1 = NoteService.createComment(
+        noteFirst,
+        Comments(message = "Comment text1")
+    )
 
-    println(NoteService.getById(2))
-
+    println(NoteService.deleteComment(comment))
+    println(NoteService.restoreComment(comment))
 }
