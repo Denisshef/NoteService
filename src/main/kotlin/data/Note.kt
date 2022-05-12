@@ -1,4 +1,6 @@
-data class Notes(
+package data
+
+data class Note(
     val noteId: Int = 0,
     val title: String,
     val text: String? = null,
@@ -6,7 +8,7 @@ data class Notes(
     val commentsPrivacy: Int = 0,
     val privacyView: String = "no",
     val privacyComment: String = "no",
-    val comments: ArrayList<Comments>? = null,
+    val comments: ArrayList<Comment>? = null,
     val delete: Boolean = false
 ){
     override fun toString(): String {
